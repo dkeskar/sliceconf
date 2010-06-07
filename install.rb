@@ -3,6 +3,10 @@ require 'packages/build_essential'
 policy :slice_setup, :roles => :app do 
 	requires :lenny_backports
 	requires :build_essential
+	# requires :nginx
+	# requires :rails
+	# requires :unicorn
+	# requires :mongo_mapper	
 end
 
 deployment do 
