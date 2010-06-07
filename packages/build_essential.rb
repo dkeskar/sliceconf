@@ -18,7 +18,6 @@ package :build_essential do
   description 'Build tools'
   apt 'build-essential', :sudo => true do
     # Update the sources and upgrade the lists before we build essentials
-    pre :install, 'aptitude update'
-		pre :install, 'aptitude safe-upgrade'
+    pre :install, ['aptitude update', 'aptitude -q -y safe-upgrade']
   end
 end
