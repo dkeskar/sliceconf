@@ -14,7 +14,7 @@ worker_processes 4
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory "/home/app/pink/current" # available in 0.94.0+
+working_directory "<%= path_to_app %>/current" # available in 0.94.0+
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
@@ -25,13 +25,13 @@ listen 8080, :tcp_nopush => true
 timeout 30
 
 # feel free to point this anywhere accessible on the filesystem
-pid "/home/app/pink/shared/pids/unicorn.pid"
+pid "<%= path_to_app %>/shared/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/home/app/pink/shared/log/unicorn.stderr.log"
-stdout_path "/home/app/pink/shared/log/unicorn.stdout.log"
+stderr_path "<%= path_to_app %>/shared/log/unicorn.stderr.log"
+stdout_path "<%= path_to_app %>/shared/log/unicorn.stdout.log"
 
 # combine REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow

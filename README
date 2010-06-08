@@ -1,0 +1,13 @@
+
+# Nginx+Unicorn App Server 
+
+Prepare & Deploy a debian lenny slice with essential components including
+Ruby Enterprise Edition, Rails, nginx, unicorn and mysql/mongo db drivers. 
+
+# Pre-requisite
+
+The created slice should allow ssh key-based authentication to a sudo-user. 
+
+# Status
+
+Work In Progress on db drivers and per-app configuration. 
