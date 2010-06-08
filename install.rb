@@ -1,8 +1,15 @@
-require 'packages/build_essential'
+$:<< File.join(File.dirname(__FILE__), 'packages')
+
+require 'lib/fixups.rb'
+%w(essential ruby_enterprise webserver mongo).each do |package|
+	require package
+end
 
 policy :slice_setup, :roles => :app do 
-	requires :lenny_backports
-	requires :build_essential
+	requires :essential
+	requires :ruby_enterprise
+	requires :rails
+	requires :webserver
 	# requires :nginx
 	# requires :rails
 	# requires :unicorn

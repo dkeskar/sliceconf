@@ -21,3 +21,11 @@ package :build_essential do
     pre :install, ['aptitude update', 'aptitude -q -y safe-upgrade']
   end
 end
+
+package :essential do 
+	description "Essential Debian packages"
+	apt 'exim4 git-core'
+	
+	requires :lenny_backports
+	requires :build_essential	
+end
