@@ -1,16 +1,16 @@
 $:<< File.join(File.dirname(__FILE__), 'packages')
 
 require 'lib/fixups.rb'
-%w(essential ruby_enterprise webserver mongo).each do |package|
+%w(essential ruby_enterprise webserver database).each do |package|
 	require package
 end
 
-policy :slice_setup, :roles => :app do 
+policy :app_slice, :roles => :app do 
 	requires :essential
 	requires :ruby_enterprise
 	requires :rails
 	requires :webserver
-	# requires :mongo_mapper	
+	requires :database_driver
 end
 
 deployment do 

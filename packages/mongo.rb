@@ -1,2 +1,0 @@
-
-# Mongo mapping and mongodb
