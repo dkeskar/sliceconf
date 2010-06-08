@@ -12,17 +12,37 @@ package :nginx do
 	end
 end
 
-package :nginx_conf, :role => :app do 
-	transfer './files/nginx.conf', "/etc/nginx/nginx.conf", :sudo => true
+package :nginx_conf do 
+	# transfer 'files/nginx.conf', "/etc/nginx/nginx.conf", :sudo => true
+	stage = "/home/app/nginx.conf"
+	dest = "/etc/nginx/nginx.conf"
+	transfer 'files/nginx.conf', stage, :sudo => true	do 
+		post :install, "sudo mv #{stage} #{dest}"
+		post :install, 'sudo /etc/init.d/nginx restart'
+	end
 	
-	post :install, '/etc/init.d/nginx restart'
+	verify do 
+		file_contains dest, "sprinkle"
+	end
+
 	requires :nginx
 end
 
 package :unicorn do 
+	version = '0.99.0'
+	gem 'unicorn', :version => version do 
+		post :install, "sudo gem uninstall rack --version 1.1.0"
+	end
 	
+	verify do 
+		has_gem 'unicorn', version
+		has_gem 'rack', '1.0.1'
+		has_executable 'unicorn'
+		has_executable 'unicorn_rails'		
+	end
 end
 
 package :nginx_and_unicorn, :provides => :webserver do 
 	requires :nginx_conf
+	requires :unicorn
 end

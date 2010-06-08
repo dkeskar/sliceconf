@@ -10,9 +10,6 @@ policy :slice_setup, :roles => :app do
 	requires :ruby_enterprise
 	requires :rails
 	requires :webserver
-	# requires :nginx
-	# requires :rails
-	# requires :unicorn
 	# requires :mongo_mapper	
 end
 
