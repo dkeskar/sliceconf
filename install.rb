@@ -11,6 +11,18 @@ policy :app_slice, :roles => :app do
 	requires :rails
 	requires :webserver
 	requires :database_driver
+	# requires :memcached
+end
+
+policy :data_slice, :roles => :storage do 
+	requires :essential
+	requires :database 
+end
+
+policy :front_end, :roles => :web do 
+	requires :essential
+	requires :webserver
+	# requires :proxy_conf
 end
 
 deployment do 
