@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Init file for unicorn instances
+#
+# description: unicorn instances
+#
+
+# source function library
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# pull in sysconfig settings
+[ -f /etc/sysconfig/unicorn ] && . /etc/sysconfig/unicorn
+
+RETVAL=0
+prog="unicorn"
+
+# Some functions to make the below more readable
+
+start()
+{
+	echo $"Starting $prog:"
+	for d in /etc/unicorn/sites/*; do
+		echo -n $d;
+		cd $d;
+		[ -f shared/pids/unicorn.pid ] && echo ": already started!"
+		[ ! -f shared/pids/unicorn.pid ] && /usr/bin/unicorn_rails -c config/unicorn.rb -E production -D && echo ": OK";
+	done
+	echo "done"
+}
+
+stop()
+{
+	echo $"Stopping $prog:"
+	for f in /etc/unicorn/sites/*; do
+	  echo -n $f;
+	  kill -QUIT `cat $f/shared/pids/*.pid` && echo ": OK" || echo ": failed";
+	done
+	echo "done"
+}
+
+restart()
+{
+	echo $"Reloading $prog:"
+	for f in /etc/unicorn/sites/*; do
+	  echo -n $f;
+	  kill -USR2 `cat $f/shared/pids/*.pid` && echo ": OK" || echo ": failed";
+	done
+	echo "done"
+}
+
+case "$1" in
+	start)
+	  start
+	  ;;
+	stop)
+	  stop
+	  ;;
+	restart)
+	  restart
+	  ;;
+	*)
+	  echo $"Usage: $0 {start|stop|restart}"
+	  RETVAL=1
+esac
+exit $RETVAL
