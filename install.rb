@@ -1,7 +1,7 @@
 $:<< File.join(File.dirname(__FILE__), 'packages')
 
 require 'lib/fixups.rb'
-%w(essential ruby_enterprise webserver database).each do |package|
+%w(essential ruby_enterprise webserver database extras).each do |package|
 	require package
 end
 
@@ -11,6 +11,8 @@ policy :app_slice, :roles => :app do
 	requires :rails
 	requires :webserver
 	requires :database_driver
+	requires :geoip
+	requires :daemons
 	# requires :memcached
 end
 
