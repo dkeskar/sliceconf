@@ -21,7 +21,7 @@ end
 
 policy :front_end, :roles => :web do 
 	requires :essential
-	requires :webserver
+	requires :nginx
 	# requires :proxy_conf
 end
 
