@@ -42,13 +42,15 @@ end
 
 # MongoDB
 package :mongo_driver do 
-	gem 'mongo_mapper' 
-	gem 'bson_ext'
+	gem 'mongo_mapper'
+	# mongo_mapper installs bson and mongo (1.0)
+	gem 'bson_ext', :version => "1.0"
 	
 	verify do 
 		%w(mongo bson bson_ext mongo_mapper).each do |mongo_component|
 			has_gem mongo_component
 		end
+		has_gem 'bson', "1.0"
 	end
 	requires :ruby_enterprise
 end
