@@ -22,10 +22,16 @@ package :build_essential do
   end
 end
 
+package :libssl_dev do 
+	description 'Libraries and headers for compiling required programs'
+	apt 'libssl-dev'
+	verify {has_file '/usr/lib/libssl.a'}
+end
+
 package :essential do 
 	description "Essential Debian packages"
 	apt 'exim4 git-core'
 	
 	requires :lenny_backports
-	requires :build_essential	
+	requires :build_essential
 end

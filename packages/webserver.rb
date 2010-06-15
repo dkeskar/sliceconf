@@ -40,6 +40,7 @@ package :unicorn do
 		has_executable 'unicorn'
 		has_executable 'unicorn_rails'		
 	end
+	requires :unicorn_initd
 end
 
 package :unicorn_initd do 

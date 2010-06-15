@@ -62,6 +62,7 @@ package :mongodb do
 	verify do 
 		has_executable 'mongod'
 		has_executable 'mongo'
+		has_process 'mongod'
 	end
 	requires :mongodb_deb
 end
