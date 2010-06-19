@@ -1,16 +1,8 @@
-package :monit do
-  description 'Monit for system monitoring of files, processes, directories, or devices'
-  version = '5.1.1'
-  source "http://mmonit.com/monit/dist/monit-#{version}.tar.gz", :sudo => true do
-		prefix "/usr/local"
-    post :install, 'mkdir /etc/monit'
-    post :install, 'mkdir /var/lib/monit'
-  end
-  
-  verify do
-    has_executable "monit"
-  end
-  requires :essential, :libssl_dev, :monit_dependencies
+
+package :monit do 
+	description "Monit for system monitoring of files, processes, directories or devices"
+	apt 'monit'
+	verify {has_executable 'monit'}
 end
 
 package :monit_rc do 
@@ -41,11 +33,6 @@ package :monit_initd do
 		has_executable '/etc/init.d/monit'
 	end	
 end
-  
-package :monit_dependencies do
-  description "Dependencies to build monit from source"
-  apt 'flex byacc'
-end
 
 package :monit_setup, :provides => :monitoring do
 	description 'Setup and configure monit'
@@ -53,3 +40,25 @@ package :monit_setup, :provides => :monitoring do
 	requires :monit_initd
 	requires :monitrc
 end
+
+# deprecated 
+package :monit_from_source do
+  description 'Monit for system monitoring of files, processes, directories, or devices'
+  version = '5.1.1'
+  source "http://mmonit.com/monit/dist/monit-#{version}.tar.gz", :sudo => true do
+		prefix "/usr/local"
+    post :install, 'mkdir /etc/monit'
+    post :install, 'mkdir /var/lib/monit'
+  end
+  
+  verify do
+    has_executable "monit"
+  end
+  requires :essential
+end
+  
+package :monit_dependencies do
+  description "Dependencies to build monit from source"
+  apt 'flex byacc'
+end
+
