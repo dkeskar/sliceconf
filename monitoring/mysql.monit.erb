@@ -1,0 +1,8 @@
+#
+# mysql 
+check process mysql with pidfile /var/run/mysqld/mysqld.pid
+    start program = "/etc/init.d/mysql start"
+    stop  program = "/etc/init.d/mysql stop"
+    group database
+    if failed unix "/var/run/mysqld/mysqld.sock" then restart
+    if 5 restarts within 5 cycles then timeout

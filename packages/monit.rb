@@ -1,16 +1,17 @@
 
 package :monit do 
 	description "Monit for system monitoring of files, processes, directories or devices"
-	apt 'monit'
-	verify {has_executable 'monit'}
+	apt 'monit', :sudo => true
+	verify {has_executable '/usr/sbin/monit'}
 end
 
 package :monit_rc do 
-  description "monitrc"	
+  description "Global monitrc customized with hostname"	
 	stage = "/home/app/monitrc"
 	dest = "/etc/monit/monitrc"	
-	transfer 'files/monitrc.erb', stage, :sudo => true do 
-		post :install, "sudo mv #{stage} #{dest}"
+	transfer 'files/monitrc.erb', stage, :render => true, :sudo => true do 
+		post :install, %{sudo sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
+		post :install, "sudo mv #{stage}.hn #{dest}"
 		post :install, "sudo chmod 644 #{dest}"
 	end
 
@@ -38,7 +39,7 @@ package :monit_setup, :provides => :monitoring do
 	description 'Setup and configure monit'
 	requires :monit
 	requires :monit_initd
-	requires :monitrc
+	requires :monit_rc
 end
 
 # deprecated 

@@ -1,0 +1,26 @@
+
+# nginx
+check process nginx with pidfile /var/run/nginx.pid
+  start program = "/etc/init.d/nginx start"
+  stop  program = "/etc/init.d/nginx stop"
+  if failed host <%= hostname %> port <%= portnum %> then restart
+  if cpu is greater than 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if totalmem > 200.0 MB for 5 cycles then restart
+  if loadavg(5min) greater than 10 for 8 cycles then stop
+  if 7 restarts within 10 cycles then timeout
+
+## Check that a process is running, responding on the HTTP and HTTPS request, 
+## check its resource usage such as cpu and memory, number of childrens. 
+## In the case that the process is not running, monit will restart it by 
+## default. In the case that the service was restarted very often and the 
+## problem remains, it is possible to disable the monitoring using the
+## TIMEOUT statement. 
+#    if failed host www.tildeslash.com port 80 protocol http
+#       and request "/monit/doc/next.php"
+#       then restart
+#    if failed port 443 type tcpssl protocol http
+#       with timeout 15 seconds
+#       then restart
+#    depends on apache_bin
+#    group server

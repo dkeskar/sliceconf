@@ -6,14 +6,13 @@ require 'lib/fixups.rb'
 end
 
 policy :app_slice, :roles => :app do 
-	# requires :essential
-	# requires :ruby_enterprise
-	# requires :rails
-	# requires :webserver
-	# requires :database_driver
-	# requires :geoip
-	# requires :daemons
-	requires :monit
+	requires :essential
+	requires :ruby_enterprise
+	requires :rails
+	requires :webserver
+	requires :database_driver
+	requires :geoip
+	requires :daemons
 	# requires :memcached
 end
 
@@ -26,6 +25,10 @@ policy :front_end, :roles => :web do
 	requires :essential
 	requires :nginx
 	# requires :proxy_conf
+end
+
+policy :system_monitoring, :roles => [:app, :storage, :web] do 
+	requires :monitoring
 end
 
 deployment do 
