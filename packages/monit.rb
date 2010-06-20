@@ -10,9 +10,9 @@ package :monit_rc do
 	stage = "/home/app/monitrc"
 	dest = "/etc/monit/monitrc"	
 	transfer 'files/monitrc.erb', stage, :render => true, :sudo => true do 
-		post :install, %{sudo sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
-		post :install, "sudo mv #{stage}.hn #{dest}"
-		post :install, "sudo chmod 644 #{dest}"
+		post :install, %{sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
+		post :install, "mv #{stage}.hn #{dest}"
+		post :install, "chmod 644 #{dest}"
 	end
 
 	verify do 
@@ -26,8 +26,8 @@ package :monit_initd do
 	stage = "/home/app/monit"
 	dest = "/etc/init.d/monit"	
 	transfer 'files/monit.init', stage, :sudo => true do 
-		post :install, "sudo mv #{stage} #{dest}"
-		post :install, "sudo chmod +x #{dest}"
+		post :install, "mv #{stage} #{dest}"
+		post :install, "chmod +x #{dest}"
 	end
 
 	verify do 

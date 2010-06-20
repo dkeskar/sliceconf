@@ -57,7 +57,7 @@ end
 
 package :mongodb do 
 	apt 'mongodb-stable' do 
-		post :install, "sudo /etc/init.d/mongod start"
+		post :install, "/etc/init.d/mongod start"
 	end
 	verify do 
 		has_executable 'mongod'
