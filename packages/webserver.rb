@@ -23,6 +23,7 @@ package :nginx_conf do
 	
 	verify do 
 		file_contains dest, "sprinkle"
+		has_process 'nginx'
 	end
 
 	requires :nginx

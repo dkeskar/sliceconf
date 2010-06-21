@@ -1,4 +1,11 @@
 
+package :monit_setup, :provides => :monitoring do
+	description 'Setup and configure monit'
+	requires :monit
+	requires :monit_initd
+	requires :monit_rc
+end
+
 package :monit do 
 	description "Monit for system monitoring of files, processes, directories or devices"
 	apt 'monit', :sudo => true
@@ -33,13 +40,6 @@ package :monit_initd do
 	verify do 
 		has_executable '/etc/init.d/monit'
 	end	
-end
-
-package :monit_setup, :provides => :monitoring do
-	description 'Setup and configure monit'
-	requires :monit
-	requires :monit_initd
-	requires :monit_rc
 end
 
 # deprecated 
