@@ -12,8 +12,7 @@ package :nginx do
 	end
 end
 
-package :nginx_conf do 
-	# transfer 'files/nginx.conf', "/etc/nginx/nginx.conf", :sudo => true
+package :nginx_setup do 
 	stage = "/home/app/nginx.conf"
 	dest = "/etc/nginx/nginx.conf"
 	transfer 'files/nginx.conf', stage, :sudo => true	do 
@@ -21,26 +20,15 @@ package :nginx_conf do
 		post :install, 'sudo /etc/init.d/nginx restart'
 	end
 	
+	monitor_using "monitoring/nginx.monit"
+	
 	verify do 
 		file_contains dest, "sprinkle"
 		has_process 'nginx'
+		has_monitored 'nginx'
 	end
 
 	requires :nginx
-end
-
-package :nginx_setup do 
-  stage = "/home/app/nginx.monitrc"
-  dest = "/etc/monit.d/nginx"
-  transfer 'files/nginx.monit.erb', stage, :render => true do 
-    post :install "sudo cp #{stage} #{dest} && rm #{stage}"
-    post :install "sudo /etc/init.d/monit reload"
-  end
-  verify do 
-    has_file dest
-    file_contains dest, "sprinkle" 
-  end
-  requires :nginx_conf
 end
 
 package :unicorn do 

@@ -18,7 +18,7 @@ Sprinkle::Installers::Apt.class_eval do
   end	
 end
 
-Sprinkle::Package::Packge.class_eval do 
+Sprinkle::Package::Package.class_eval do 
   def monitor_using(configfile, options = {}, &block)
     @installers << Sprinkle::Installers::Monitor.new(self, configfile, options, &block)
   end  
@@ -44,18 +44,32 @@ module Sprinkle
 		# Supports pre/post :install directives should you need to run commands before or 
 		# after the monitoring setup
 		#
-    class Monitor < Sprinkle::Installer::Transfer
+    class Monitor < Sprinkle::Installers::Transfer
 
-      def initialize(parent, config, stage, options={}, &block) #:nodoc:
+      def initialize(parent, config, options={}, &block) #:nodoc:
         options.merge!(:render => true) if config.match(/erb$/)
+        @component = config.split('/').last.split('.').first        
+        stage = "/tmp/#{@component}.#{Time.now.to_i}"
         super parent, config, stage, options, &block
-        @component = config.split('/').last.split('.').first
-        @config = "/etc/monit.d/#{@config}"
-        post(:install, "sudo cp #{stage} #{@config} && rm #{stage}")
+        @config = "/etc/monit/conf.d/#{@component}"
+        post(:install, "cp #{stage} #{@config} && rm #{stage}")
         post(:install, "sudo chmod 644 #{@config}")
-        post(:install, "sudo /etc/init.d/monit reload")
+        post(:install, "sudo /etc/init.d/monit force-reload")
       end
       
     end
   end
 end
+
+module Sprinkle
+  module Verifiers
+    module Monitoring
+      Sprinkle::Verify.register(Sprinkle::Verifiers::Monitoring)      
+      
+      def has_monitored(process_name)
+        @commands << "grep 'check process #{process_name}' /etc/monit/monitrc /etc/monit/conf.d/*"
+      end
+    end
+  end
+end
+
