@@ -5,30 +5,30 @@ require 'lib/fixups.rb'
 	require package
 end
 
-# It helps to have added the ssh key identity earlier by doing an ssh to 
-# one or more of these servers. 
-# policy :common_setup, :roles => [:app, :storage, :web] do 
-#   requires :essential
-#   requires :monitoring
-#   requires :ruby_enterprise 
-# end
-# 
-# policy :app_slice, :roles => :app do 
-#   requires :rails
-#   requires :webserver
-#   requires :database_driver
-#   requires :geoip
-#   requires :daemons
-#   # requires :memcached
-# end
-# 
-# policy :data_slice, :roles => :storage do 
-#   requires :database 
-# end
-# 
-# policy :front_end, :roles => :web do 
-#   requires :nginx_conf
-# end
+It helps to have added the ssh key identity earlier by doing an ssh to 
+one or more of these servers. 
+policy :common_setup, :roles => [:app, :storage, :web] do 
+  requires :essential
+  requires :monitoring
+  requires :ruby_enterprise 
+end
+
+policy :app_slice, :roles => :app do 
+  requires :rails
+  requires :webserver
+  requires :database_driver
+  requires :geoip
+  requires :daemons
+  # requires :memcached
+end
+
+policy :data_slice, :roles => :storage do 
+  requires :database 
+end
+
+policy :front_end, :roles => :web do 
+  requires :nginx_conf
+end
 
 deployment do 
 	delivery :capistrano do 
