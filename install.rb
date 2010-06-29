@@ -5,8 +5,8 @@ require 'lib/fixups.rb'
 	require package
 end
 
-It helps to have added the ssh key identity earlier by doing an ssh to 
-one or more of these servers. 
+# It helps to have added the ssh key identity earlier by doing an ssh to 
+# one or more of these servers. 
 policy :common_setup, :roles => [:app, :storage, :web] do 
   requires :essential
   requires :monitoring
