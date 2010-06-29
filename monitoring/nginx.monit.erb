@@ -1,9 +1,11 @@
 
 # nginx
+# Deployed via sprinkle 
+
 check process nginx with pidfile /var/run/nginx.pid
   start program = "/etc/init.d/nginx start"
   stop  program = "/etc/init.d/nginx stop"
-  if failed host <%= hostname %> port <%= portnum %> then restart
+  if failed host localhost port 80 then restart
   if cpu is greater than 60% for 2 cycles then alert
   if cpu > 80% for 5 cycles then restart
   if totalmem > 200.0 MB for 5 cycles then restart

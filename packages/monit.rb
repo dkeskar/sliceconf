@@ -16,14 +16,15 @@ package :monit_rc do
   description "Global monitrc customized with hostname"	
 	stage = "/home/app/monitrc"
 	dest = "/etc/monit/monitrc"	
-	transfer 'files/monitrc.erb', stage, :render => true, :sudo => true do 
-		post :install, %{sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
-		post :install, "mv #{stage}.hn #{dest}"
-		post :install, "chmod 644 #{dest}"
+	transfer 'files/monitrc.erb', stage, :render => true do 
+		post :install, %{sudo sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
+		post :install, "sudo cp #{stage}.hn #{dest} && rm #{stage} #{stage}.hn"
+		post :install, "sudo chmod 644 #{dest}"
 	end
 
 	verify do 
-		has_file '/etc/monit/monitrc'
+		has_file dest
+		file_contains dest, "sprinkle"
 	end
 	requires :monit, :monit_initd
 end
@@ -42,7 +43,7 @@ package :monit_initd do
 	end	
 end
 
-# deprecated 
+############ deprecated -- now installed via apt.
 package :monit_from_source do
   description 'Monit for system monitoring of files, processes, directories, or devices'
   version = '5.1.1'

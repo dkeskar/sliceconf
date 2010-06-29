@@ -1,5 +1,7 @@
 #
 # mysql 
+# Deployed via sprinkle 
+#
 check process mysql with pidfile /var/run/mysqld/mysqld.pid
     start program = "/etc/init.d/mysql start"
     stop  program = "/etc/init.d/mysql stop"

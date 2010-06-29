@@ -17,7 +17,7 @@ package :nginx_conf do
 	stage = "/home/app/nginx.conf"
 	dest = "/etc/nginx/nginx.conf"
 	transfer 'files/nginx.conf', stage, :sudo => true	do 
-		post :install, "sudo mv #{stage} #{dest}"
+		post :install, "sudo cp #{stage} #{dest} && rm #{stage}"
 		post :install, 'sudo /etc/init.d/nginx restart'
 	end
 	
@@ -27,6 +27,20 @@ package :nginx_conf do
 	end
 
 	requires :nginx
+end
+
+package :nginx_setup do 
+  stage = "/home/app/nginx.monitrc"
+  dest = "/etc/monit.d/nginx"
+  transfer 'files/nginx.monit.erb', stage, :render => true do 
+    post :install "sudo cp #{stage} #{dest} && rm #{stage}"
+    post :install "sudo /etc/init.d/monit reload"
+  end
+  verify do 
+    has_file dest
+    file_contains dest, "sprinkle" 
+  end
+  requires :nginx_conf
 end
 
 package :unicorn do 
@@ -58,6 +72,6 @@ package :unicorn_initd do
 end
 
 package :nginx_and_unicorn, :provides => :webserver do 
-	requires :nginx_conf
+	requires :nginx_setup
 	requires :unicorn
 end
