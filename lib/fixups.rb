@@ -1,21 +1,21 @@
 
 Sprinkle::Installers::Deb.class_eval do 
-	protected
-	def install_commands #:nodoc:
+  protected
+  def install_commands #:nodoc:
     [
-		"wget -cq --directory-prefix=/tmp #{@packages.join(' ')}", 
-		"dpkg -i #{@packages.collect{|p| "/tmp/#{package_name(p)}"}.join(" ")}"
-		]				
-	end	
+    "wget -cq --directory-prefix=/tmp #{@packages.join(' ')}", 
+    "dpkg -i #{@packages.collect{|p| "/tmp/#{package_name(p)}"}.join(" ")}"
+    ]				
+  end	
 end
 
 Sprinkle::Installers::Apt.class_eval do 
-	protected
-	def install_commands #:nodoc:
+  protected
+  def install_commands #:nodoc:
     command = @options[:dependencies_only] ? 'build-dep' : 'install'
-		release = @options[:distro_release] ? "-t #{@options[:distro_release]}" : ""
+    release = @options[:distro_release] ? "-t #{@options[:distro_release]}" : ""
     "env DEBCONF_TERSE='yes' DEBIAN_PRIORITY='critical' DEBIAN_FRONTEND=noninteractive apt-get --force-yes -qyu #{release} #{command} #{@packages.join(' ')}"				
-	end	
+  end	
 end
 
 Sprinkle::Package::Packge.class_eval do 
@@ -39,7 +39,6 @@ module Sprinkle
     #   end
     #
     # By default, :sudo is true
-    # priveledges, you can pass :sudo => true 
     #
 		# Default location for the file is /etc/monit.d/<first-part-of-filename-before-dot>
 		# Supports pre/post :install directives should you need to run commands before or 
