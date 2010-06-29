@@ -3,7 +3,7 @@
 # role :app, "a1.example.com",  "a2.example.com" 
 # role :web, "web.example.com"
 # role :storage, "db.example.com"
-require 'server_roles'
+load 'config/server_roles'
 
 set :user, "app"
 

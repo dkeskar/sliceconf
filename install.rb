@@ -5,31 +5,27 @@ require 'lib/fixups.rb'
 	require package
 end
 
-# policy :common_setup, :roles => [:app, :storage, :web] do 
-#   requires :essential
-#   requires :monitoring
-#   requires :ruby_enterprise 
-# end
-# 
-# policy :app_slice, :roles => :app do 
-#   requires :rails
-#   requires :webserver
-#   requires :database_driver
-#   requires :geoip
-#   requires :daemons
-#   # requires :memcached
-# end
-# 
-# policy :data_slice, :roles => :storage do 
-#   requires :database 
-# end
-# 
-# policy :front_end, :roles => :web do 
-#   requires :nginx_setup
-# end
-
-policy :test, :roles => [:app, :storage, :web] do
+policy :common_setup, :roles => [:app, :storage, :web] do 
+  requires :essential
   requires :monitoring
+  requires :ruby_enterprise 
+end
+
+policy :app_slice, :roles => :app do 
+  requires :rails
+  requires :webserver
+  requires :database_driver
+  requires :geoip
+  requires :daemons
+  # requires :memcached
+end
+
+policy :data_slice, :roles => :storage do 
+  requires :database 
+end
+
+policy :front_end, :roles => :web do 
+  requires :nginx_setup
 end
 
 deployment do 
