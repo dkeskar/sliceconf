@@ -52,8 +52,9 @@ module Sprinkle
         stage = "/tmp/#{@component}.#{Time.now.to_i}"
         super parent, config, stage, options, &block
         @config = "/etc/monit/conf.d/#{@component}"
-        post(:install, "cp #{stage} #{@config} && rm #{stage}")
-        post(:install, "sudo chmod 644 #{@config}")
+        post(:install, "cp #{stage} #{@config}")
+        post(:install, "sudo rm #{stage}")
+        post(:install, "sudo chmod 600 #{@config}")
         post(:install, "sudo /etc/init.d/monit force-reload")
       end
       

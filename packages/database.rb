@@ -33,9 +33,11 @@ end
 package :mysql do 
 	description 'MySQL database'
 	
-	apt 'mysql-server'
+	apt 'mysql-server'	
+	monitor_using "monitoring/mysql.monit"
 	verify do 
 		has_executable '/etc/init.d/mysql'
+		has_monitored 'mysql'
 	end	
 	requires :mysql_client
 end
@@ -57,12 +59,16 @@ end
 
 package :mongodb do 
 	apt 'mongodb-stable' do 
-		post :install, "/etc/init.d/mongod start"
+		post :install, "/etc/init.d/mongodb start"
 	end
+
+	monitor_using "monitoring/mongodb.monit"	
+
 	verify do 
 		has_executable 'mongod'
 		has_executable 'mongo'
 		has_process 'mongod'
+    has_monitored 'mongod'
 	end
 	requires :mongodb_deb
 end

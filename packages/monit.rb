@@ -2,7 +2,6 @@
 package :monit_setup, :provides => :monitoring do
 	description 'Setup and configure monit'
 	requires :monit
-  # requires :monit_initd
 	requires :monit_rc
 	requires :monit_enable
 end
@@ -20,7 +19,7 @@ package :monit_rc do
 	transfer 'files/monitrc.erb', stage, :render => true do 
 		post :install, %{sudo sed "s/_SPRINKLE_HOSTNAME/`hostname`/" #{stage} > #{stage}.hn}
 		post :install, "sudo cp #{stage}.hn #{dest} && rm #{stage} #{stage}.hn"
-		post :install, "sudo chmod 644 #{dest}"
+		post :install, "sudo chmod 600 #{dest}"
 		post :install, "sudo mkdir -p /etc/monit/conf.d"
 	end
 
@@ -32,20 +31,6 @@ package :monit_rc do
 	requires :monit, :monit_initd
 end
 
-package :monit_initd do
-  description "monit init.d script"	
-	stage = "/home/app/monit"
-	dest = "/etc/init.d/monit"	
-	transfer 'files/monit.init', stage, :sudo => true do 
-		post :install, "mv #{stage} #{dest}"
-		post :install, "chmod +x #{dest}"
-	end
-
-	verify do 
-		has_executable '/etc/init.d/monit'
-	end	
-end
-
 package :monit_enable do 
   description "Enable monit to start"
   monitd = "/etc/default/monit"
@@ -53,7 +38,7 @@ package :monit_enable do
   noop do 
     post :install, %{sed "s/startup=0/startup=1/" #{monitd} > #{stage}}
     post :install, "sudo cp #{stage} #{monitd} && rm #{stage}"
-    post :install, "sudo /etc/init.d/monit start"
+    post :install, "sudo /etc/init.d/monit force-reload"
   end
   
   verify do 
@@ -77,6 +62,21 @@ package :monit_from_source do
     has_executable "monit"
   end
   requires :essential
+end
+
+# not required when properly installed via debian package. 
+package :monit_initd do
+  description "monit init.d script"	
+	stage = "/home/app/monit"
+	dest = "/etc/init.d/monit"	
+	transfer 'files/monit.init', stage do 
+		post :install, "sudo mv #{stage} #{dest}"
+		post :install, "sudo chmod +x #{dest}"
+	end
+
+	verify do 
+		has_executable '/etc/init.d/monit'
+	end	
 end
   
 package :monit_dependencies do

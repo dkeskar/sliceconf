@@ -1,2 +1,3 @@
 *.tmproj
 config/server_roles.rb
+config/private_info.rb

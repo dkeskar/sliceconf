@@ -5,6 +5,8 @@
 # role :storage, "db.example.com"
 load 'config/server_roles'
 
+#  Put SMTP email account information and passwords in config/private_info.rb
+
 set :user, "app"
 
 # In some cases (e.g. apt commands) capistrano invokes sh -c sudo -p 
